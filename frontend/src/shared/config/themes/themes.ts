@@ -19,7 +19,7 @@ const initialTheme: ChatTheme = {
 
     background: {
         type: "image",
-        value: "/images/themes/default.jpg",
+        value: "/images/themes/default.png",
         overlay: "rgba(0, 0, 0, 0.2)",
         blur: 0,
     },
