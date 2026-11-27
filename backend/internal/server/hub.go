@@ -22,3 +22,20 @@ func NewHub() *Hub {
         broadcast:  make(chan []byte),
 	}
 }
+
+func (h *Hub) Run() {
+	for {
+		select {
+			case client := <- h.register:
+				h.clients[client] = true
+
+			case client := <-h.unregister:
+				delete(h.clients, client)
+				
+			case message := <-h.broadcast:
+				for client := range h.clients {
+					client.send <- message
+				}
+		}
+	}
+}
