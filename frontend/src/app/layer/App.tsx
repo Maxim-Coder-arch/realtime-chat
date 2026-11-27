@@ -1,7 +1,11 @@
+import { Layout } from "./layout";
+
+import { MainPage } from "../../widgets/pages/main-page/layer/main-page";
+
 export const App = () => {
   return (
-    <div>
-      home
-    </div>
+    <Layout>
+      <MainPage />
+    </Layout>
   )
 }
