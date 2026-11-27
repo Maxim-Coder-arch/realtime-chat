@@ -10,6 +10,9 @@ import (
 
 func NewServer() *http.ServeMux {
 	mux := http.NewServeMux()
+	hub := NewHub()
+
+	go hub.Run()
 
 	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
@@ -21,26 +24,31 @@ func NewServer() *http.ServeMux {
 			return
 		}
 
-		defer conn.Close(websocket.StatusNormalClosure, "connection closed")
+		client := &Client{
+			conn: conn,
+			send: make(chan []byte),
+		}
+
+		hub.register <- client
+
+		go client.WritePump()
+
+		defer func() {
+			hub.unregister <- client
+		}()
 
 		ctx := context.Background()
 
 		for {
-			 messageType, data, err := conn.Read(ctx)
+			_, message, err := conn.Read(ctx)
 
 			if err != nil {
 				log.Println("Connection closed:", err)
+				
 				return
 			}
 
-			log.Println("Received:", string(data))
-
-			err = conn.Write(ctx, messageType, data)
-
-        	if err != nil {
-				log.Println("Message sending error:", err)
-				return
-        	}
+			hub.broadcast <- message
 		}
 	})
 

@@ -36,6 +36,7 @@ func (h *Hub) Run() {
 
 			case client := <-h.unregister:
 				delete(h.clients, client)
+    			close(client.send)
 
 			case message := <-h.broadcast:
 				for client := range h.clients {
@@ -53,7 +54,7 @@ func (c *Client) WritePump() {
 
 		if err != nil {
             log.Println("Message sending error:", err)
-			
+
             return
         }
 	}
