@@ -26,7 +26,7 @@ func NewServer() *http.ServeMux {
 
 		client := &Client{
 			conn: conn,
-			send: make(chan []byte),
+			send: make(chan []byte, 16),
 		}
 
 		hub.register <- client
@@ -44,11 +44,14 @@ func NewServer() *http.ServeMux {
 
 			if err != nil {
 				log.Println("Connection closed:", err)
-				
+
 				return
 			}
 
-			hub.broadcast <- message
+			hub.broadcast <- Message{
+				sender: client,
+				data:   message,
+			}
 		}
 	})
 

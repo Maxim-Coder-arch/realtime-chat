@@ -12,11 +12,16 @@ type Client struct {
 	send 	chan []byte
 }
 
+type Message struct {
+	sender	*Client
+	data	[]byte
+}
+
 type Hub struct {
 	clients 	map[*Client]bool
 	register 	chan *Client
 	unregister 	chan *Client
-	broadcast 	chan []byte
+	broadcast chan Message
 }
 
 func NewHub() *Hub {
@@ -24,7 +29,7 @@ func NewHub() *Hub {
 		clients:    make(map[*Client]bool),
         register:   make(chan *Client),
         unregister: make(chan *Client),
-        broadcast:  make(chan []byte),
+        broadcast:  make(chan Message),
 	}
 }
 
@@ -35,12 +40,28 @@ func (h *Hub) Run() {
 				h.clients[client] = true
 
 			case client := <-h.unregister:
-				delete(h.clients, client)
-    			close(client.send)
+				if _, ok := h.clients[client]; ok {
+					delete(h.clients, client)
+					close(client.send)
+				}
 
 			case message := <-h.broadcast:
 				for client := range h.clients {
-					client.send <- message
+					if client == message.sender {
+						continue
+					}
+
+					select {
+						case client.send <- message.data:
+						default:
+							delete(h.clients, client)
+							close(client.send)
+
+							client.conn.Close(
+								websocket.StatusPolicyViolation,
+								"client is too slow",
+							)
+						}
 				}
 		}
 	}
