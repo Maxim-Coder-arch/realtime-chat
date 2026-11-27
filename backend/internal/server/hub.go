@@ -1,6 +1,11 @@
 package server
 
-import "github.com/coder/websocket"
+import (
+	"context"
+	"log"
+
+	"github.com/coder/websocket"
+)
 
 type Client struct {
 	conn 	*websocket.Conn
@@ -31,11 +36,25 @@ func (h *Hub) Run() {
 
 			case client := <-h.unregister:
 				delete(h.clients, client)
-				
+
 			case message := <-h.broadcast:
 				for client := range h.clients {
 					client.send <- message
 				}
 		}
+	}
+}
+
+func (c *Client) WritePump() {
+	defer c.conn.Close(websocket.StatusNormalClosure, "connection closed")
+
+	for message := range c.send {
+		err := c.conn.Write(context.Background(), websocket.MessageText, message)
+
+		if err != nil {
+            log.Println("Message sending error:", err)
+			
+            return
+        }
 	}
 }
