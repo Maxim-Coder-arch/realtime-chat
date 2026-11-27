@@ -28,6 +28,11 @@ const initialTheme: ChatTheme = {
         glass: false,
         snowfall: false,
     },
+    panel: {
+        background: "rgba(37, 42, 56, 0.52)",
+        blur: 10,
+        border: "rgba(255, 255, 255, 0.1)",
+    },
 };
 
 const themesStore: StateCreator<ThemesState> = () => ({

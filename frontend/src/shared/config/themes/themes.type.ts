@@ -24,6 +24,12 @@ export interface ChatTheme {
         snowfall: boolean;
         pattern?: string;
     };
+
+    panel: {
+        background: string;
+        blur: number;
+        border: string;
+    };
 }
 
 export interface ThemesState {

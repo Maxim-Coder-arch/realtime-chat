@@ -1,0 +1,306 @@
+@use "../../../../../app/styles/scss/includes" as *;
+
+.chat-section {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+}
+
+.chat-panel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+
+    border-radius: $radius-2xl;
+    box-shadow: $shadow-panel;
+}
+
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: $header-height;
+    padding: 0 $spacing-2xl;
+
+    border-bottom: 1px solid $color-border;
+}
+
+.chat-user {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+}
+
+.chat-avatar {
+    @include flex-center;
+
+    position: relative;
+
+    width: $avatar-size;
+    height: $avatar-size;
+
+    border-radius: $radius-full;
+    background: linear-gradient(145deg, #9b8ad7, #62538e);
+
+    @include chat-font($font-size-md, $font-weight-semibold, #fff);
+
+    .online-indicator {
+        position: absolute;
+        right: 0;
+        bottom: 1px;
+
+        width: 11px;
+        height: 11px;
+
+        border: 2px solid #252a38;
+        border-radius: $radius-full;
+        background: $color-online;
+    }
+}
+
+.chat-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    h2 {
+        margin: 0;
+
+        @include chat-font($font-size-md, $font-weight-semibold, $color-text-primary);
+        letter-spacing: -0.2px;
+    }
+
+    span {
+        @include chat-font($font-size-sm, $font-weight-regular, $color-text-secondary);
+    }
+}
+
+.chat-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    button {
+        @include flex-center;
+        @include interactive-surface;
+
+        width: 36px;
+        height: 36px;
+
+        border: 0;
+        border-radius: $radius-md;
+        background: transparent;
+
+        @include chat-font(23px, $font-weight-regular, $color-text-secondary);
+
+        &:hover {
+            background: $color-surface-hover;
+            color: $color-text-primary;
+        }
+    }
+}
+
+
+.chat-messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    min-height: 0;
+    padding: $spacing-2xl $spacing-xl;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: $radius-full;
+        background: $color-border-hover;
+    }
+}
+
+.chat-date {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing-sm;
+
+    span {
+        padding: 6px $spacing-md;
+
+        border: 1px solid $color-border;
+        border-radius: $radius-full;
+        background: $color-surface-input;
+
+        @include chat-font(11px, $font-weight-medium, $color-text-secondary);
+    }
+}
+
+.message-row {
+    display: flex;
+    width: 100%;
+
+    &.incoming {
+        justify-content: flex-start;
+
+        .message-bubble {
+            border-radius: $radius-sm $radius-xl $radius-xl $radius-xl;
+            background: $color-message-incoming;
+        }
+    }
+
+    &.outgoing {
+        justify-content: flex-end;
+
+        .message-bubble {
+            border-radius: $radius-xl $radius-sm $radius-xl $radius-xl;
+            background: $color-message-outgoing;
+        }
+    }
+}
+
+.message-bubble {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    max-width: 78%;
+    padding: 11px $spacing-md 8px;
+
+    color: $color-text-primary;
+
+    p {
+        margin: 0;
+
+        @include chat-font($font-size-base, $font-weight-regular, $color-text-primary);
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+}
+
+.message-time {
+    align-self: flex-end;
+
+    @include chat-font($font-size-xs, $font-weight-regular, $color-text-secondary);
+    line-height: 1;
+}
+
+.message-check {
+    margin-left: 2px;
+    color: $color-accent-light;
+}
+
+
+.chat-footer {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    min-height: $footer-height;
+    padding: $spacing-md $spacing-lg;
+
+    border-top: 1px solid $color-border;
+}
+
+.attachment-button,
+.send-button {
+    @include flex-center;
+    @include interactive-surface;
+
+    flex-shrink: 0;
+
+    width: $button-size;
+    height: $button-size;
+
+    border: 0;
+    border-radius: $radius-lg;
+}
+
+.attachment-button {
+    background: transparent;
+
+    @include chat-font(25px, $font-weight-regular, $color-text-secondary);
+
+    &:hover {
+        background: $color-surface-hover;
+        color: $color-text-primary;
+    }
+}
+
+.message-input-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: $spacing-sm;
+
+    min-width: 0;
+    height: 44px;
+    padding: 0 $spacing-md;
+
+    border: 1px solid $color-border-hover;
+    border-radius: $radius-lg;
+    background: $color-surface-input;
+
+    transition: border-color $transition-fast, background $transition-fast;
+
+    &:focus-within {
+        border-color: rgba($color-accent, 0.55);
+        background: rgba(0, 0, 0, 0.18);
+    }
+
+    input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+
+        border: 0;
+        outline: 0;
+        background: transparent;
+
+        @include chat-font($font-size-base, $font-weight-regular, $color-text-primary);
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
+    }
+}
+
+.emoji-button {
+    @include flex-center;
+    @include interactive-surface;
+
+    width: 28px;
+    height: 28px;
+
+    border: 0;
+    background: transparent;
+
+    @include chat-font(20px, $font-weight-regular, $color-text-secondary);
+
+    &:hover {
+        color: $color-text-primary;
+    }
+}
+
+.send-button {
+    background: $color-accent;
+
+    @include chat-font(21px, $font-weight-semibold, #fff);
+
+    &:hover {
+        background: $color-accent-hover;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}

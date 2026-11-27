@@ -1,0 +1,16 @@
+@use "../../../../../app/styles/scss/includes" as *;
+
+.main-page-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 18px;
+
+    width: 100%;
+    min-height: 100vh;
+    padding: 18px;
+
+    > * {
+        flex: 1;
+        min-width: 0;
+    }
+}

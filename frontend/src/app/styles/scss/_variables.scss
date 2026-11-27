@@ -1,6 +1,62 @@
-$bg-color: #0f0f0f;
-$light-grey: #8f8e8e;
-$white: #dad8d8;
-$light-title: #f7f3f3;
-$light-yellow: rgb(237, 237, 150);
-$font-body: "Inter", sans-serif;
+// Colors
+$color-text-primary: rgba(255, 255, 255, 0.94);
+$color-text-secondary: rgba(255, 255, 255, 0.48);
+$color-text-muted: rgba(255, 255, 255, 0.35);
+
+$color-border: rgba(255, 255, 255, 0.08);
+$color-border-hover: rgba(255, 255, 255, 0.14);
+
+$color-surface-hover: rgba(255, 255, 255, 0.08);
+$color-surface-input: rgba(0, 0, 0, 0.12);
+
+$color-message-incoming: rgba(255, 255, 255, 0.09);
+$color-message-outgoing: rgba(139, 120, 197, 0.72);
+
+$color-accent: #8b78c5;
+$color-accent-hover: #9b88d5;
+$color-accent-light: #c9bcf4;
+
+$color-online: #54cf91;
+
+// Typography
+$font-primary: "Inter", sans-serif;
+$font-decorative: "Bebas Neue", sans-serif;
+
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-base: 13px;
+$font-size-md: 15px;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+
+// Radius
+$radius-sm: 5px;
+$radius-md: 11px;
+$radius-lg: 14px;
+$radius-xl: 16px;
+$radius-2xl: 20px;
+$radius-full: 50%;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
+
+// Dimensions
+$header-height: 76px;
+$footer-height: 76px;
+$avatar-size: 43px;
+$button-size: 40px;
+
+// Transitions
+$transition-fast: 0.2s ease;
+
+// Shadows
+$shadow-panel:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
