@@ -55,5 +55,12 @@ func NewServer() *http.ServeMux {
 		}
 	})
 
+	mux.HandleFunc("/api/files", UploadFile)
+
+	mux.Handle("/uploads/", http.StripPrefix(
+		"/uploads/",
+		http.FileServer(http.Dir(uploadDir)),
+	))
+
 	return mux
 }
