@@ -2,10 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
     WebSocketClient,
-    type WebSocketStatus,
 } from "../../../shared/api/websocket/websocket-client";
 
-import type { ChatMessage, ChatSide } from "../../../shared/api/websocket/chat-message.type";
+import type { 
+    ChatMessage, 
+    ChatSide, 
+    WebSocketStatus
+ } from "../../../shared/api/websocket/chat-message.type";
 
 const WS_URL = import.meta.env.VITE_WS_URL;
 

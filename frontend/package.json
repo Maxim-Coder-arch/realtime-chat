@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.3.5",
     "css-modules": "^0.3.0",
     "framer-motion": "^14.14.0",
+    "lucide-react": "^1.83.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "sass": "^1.108.2",

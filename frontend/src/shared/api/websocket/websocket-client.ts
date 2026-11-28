@@ -1,19 +1,11 @@
-import type { ChatMessage } from "./chat-message.type";
-
-export type WebSocketStatus =
-    | "connecting"
-    | "connected"
-    | "disconnected"
-    | "error";
-
-type MessageListener = (message: ChatMessage) => void;
-type StatusListener = (status: WebSocketStatus) => void;
-type ErrorListener = (error: Event) => void;
-
-interface WebSocketClientOptions {
-    reconnect?: boolean;
-    reconnectDelay?: number;
-}
+import type { 
+    ChatMessage, 
+    ErrorListener, 
+    MessageListener, 
+    StatusListener, 
+    WebSocketClientOptions,
+    WebSocketStatus
+ } from "./chat-message.type";
 
 export class WebSocketClient {
     private socket: WebSocket | null = null;
@@ -28,29 +20,23 @@ export class WebSocketClient {
     private readonly reconnect: boolean;
     private readonly reconnectDelay: number;
 
-    constructor(
-        url: string,
-        options: WebSocketClientOptions = {},
-    ) {
+    private readonly url: string;
+
+    constructor(url: string, options: WebSocketClientOptions = {}) {
         this.reconnect = options.reconnect ?? true;
         this.reconnectDelay = options.reconnectDelay ?? 3000;
+        this.url = url;
     }
 
-    connect(): void {
-        if (
-            this.socket?.readyState === WebSocket.OPEN ||
-            this.socket?.readyState === WebSocket.CONNECTING
-        ) {
+    connect() {
+        if (this.socket?.readyState === WebSocket.OPEN || this.socket?.readyState === WebSocket.CONNECTING) {
             return;
         }
+        const socket = new WebSocket(this.url);
 
         this.shouldReconnect = true;
         this.clearReconnectTimer();
-
         this.setStatus("connecting");
-
-        const socket = new WebSocket(this.url);
-
         this.socket = socket;
 
         socket.onopen = () => {
@@ -88,7 +74,7 @@ export class WebSocketClient {
         };
     }
 
-    send(message: ChatMessage): boolean {
+    send(message: ChatMessage) {
         if (this.socket?.readyState !== WebSocket.OPEN) {
             return false;
         }
@@ -98,7 +84,7 @@ export class WebSocketClient {
         return true;
     }
 
-    disconnect(): void {
+    disconnect() {
         this.shouldReconnect = false;
 
         this.clearReconnectTimer();
@@ -111,7 +97,7 @@ export class WebSocketClient {
         this.setStatus("disconnected");
     }
 
-    onMessage(listener: MessageListener): () => void {
+    onMessage(listener: MessageListener) {
         this.messageListeners.add(listener);
 
         return () => {
@@ -119,7 +105,7 @@ export class WebSocketClient {
         };
     }
 
-    onStatus(listener: StatusListener): () => void {
+    onStatus(listener: StatusListener) {
         this.statusListeners.add(listener);
 
         return () => {
@@ -127,7 +113,7 @@ export class WebSocketClient {
         };
     }
 
-    onError(listener: ErrorListener): () => void {
+    onError(listener: ErrorListener) {
         this.errorListeners.add(listener);
 
         return () => {
@@ -135,7 +121,7 @@ export class WebSocketClient {
         };
     }
 
-    private handleMessage(data: unknown): void {
+    private handleMessage(data: unknown) {
         if (typeof data !== "string") {
             return;
         }
@@ -145,6 +131,7 @@ export class WebSocketClient {
 
             if (!this.isChatMessage(message)) {
                 console.warn("Invalid chat message:", message);
+                
                 return;
             }
 
@@ -171,13 +158,13 @@ export class WebSocketClient {
         );
     }
 
-    private setStatus(status: WebSocketStatus): void {
+    private setStatus(status: WebSocketStatus) {
         this.statusListeners.forEach((listener) => {
             listener(status);
         });
     }
 
-    private scheduleReconnect(): void {
+    private scheduleReconnect() {
         if (this.reconnectTimer !== null) {
             return;
         }
@@ -188,9 +175,10 @@ export class WebSocketClient {
         }, this.reconnectDelay);
     }
 
-    private clearReconnectTimer(): void {
+    private clearReconnectTimer() {
         if (this.reconnectTimer !== null) {
             clearTimeout(this.reconnectTimer);
+            
             this.reconnectTimer = null;
         }
     }
