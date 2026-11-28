@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -59,28 +58,34 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to create file", http.StatusInternalServerError)
 		return
 	}
-	defer dst.Close()
+
+	fileSaved := false
+
+	defer func() {
+		dst.Close()
+
+		if !fileSaved {
+			os.Remove(filePath)
+		}
+	}()
 
 	written, err := io.Copy(dst, file)
 	if err != nil {
-		os.Remove(filePath)
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)
 		return
 	}
 
-	buffer := make([]byte, 512)
-
-	n, err := dst.Seek(0, io.SeekStart)
+	src, err := os.Open(filePath)
 	if err != nil {
-		os.Remove(filePath)
 		http.Error(w, "Failed to read file", http.StatusInternalServerError)
 		return
 	}
-	_ = n
+	defer src.Close()
 
-	read, err := dst.Read(buffer)
+	buffer := make([]byte, 512)
+
+	read, err := src.Read(buffer)
 	if err != nil && err != io.EOF {
-		os.Remove(filePath)
 		http.Error(w, "Failed to detect file type", http.StatusInternalServerError)
 		return
 	}
@@ -98,6 +103,8 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
-		fmt.Println("Failed to encode file response:", err)
+		return
 	}
+
+	fileSaved = true
 }
