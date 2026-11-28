@@ -1,0 +1,41 @@
+import type { CSSProperties, FormEvent, ReactNode } from "react";
+
+import type { statusLabels } from "./config";
+
+import type { ChatMessage } from "../../../../shared/api/websocket/chat-message.type";
+import type { Sticker } from "../../../../entities/sticker";
+
+export interface ChatMessageProps {
+    messages: ChatMessage[];
+    side: "a" | "b";
+}
+
+export interface ChatPanelLayoutProps { 
+    children: ReactNode;
+    panelStyle: CSSProperties;
+    title: string;
+}
+
+export interface FooterChatProps {
+    messageText: string;
+    canSend: boolean;
+    isUploading: boolean;
+    uploadError: string | null;
+
+    onMessageTextChange: (value: string) => void;
+    onFileSelect: (file: File) => void;
+    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    onStickerSelect: (sticker: Sticker) => void;
+}
+
+export type ChatStatus = keyof typeof statusLabels;
+
+export interface HeaderChatProps {
+    title: string;
+    status: ChatStatus;
+}
+
+export interface ChatPanelProps {
+    title: string;
+    side: "a" | "b";
+}

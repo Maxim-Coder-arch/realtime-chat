@@ -1,12 +1,12 @@
 import { MainPageLayout } from "./components/main-page-layout";
 
-import { ChatPanel } from "./chat-panel/chat-panel";
+import { ChatPanel } from "./chat-panel";
 
 export const MainPage = () => {
     return (
         <MainPageLayout>
-            <ChatPanel title="chat a" />
-            <ChatPanel title="chat b" />
+            <ChatPanel title="Mark" side="a" />
+            <ChatPanel title="Tony" side="b" />
         </MainPageLayout>
     )
 }

@@ -1,6 +1,6 @@
 import { Layout } from "./layout";
 
-import { MainPage } from "../../widgets/pages/main-page/ui/layer/main-page";
+import { MainPage } from "../../widgets/pages/main-page";
 
 export const App = () => {
   return (
