@@ -150,11 +150,30 @@ export class WebSocketClient {
 
         const message = value as Record<string, unknown>;
 
+        if (
+            typeof message.id !== "string" ||
+            typeof message.text !== "string" ||
+            (message.sender !== "a" && message.sender !== "b") ||
+            typeof message.createdAt !== "string"
+        ) {
+            return false;
+        }
+
+        if (message.attachment === undefined) {
+            return true;
+        }
+
+        if (typeof message.attachment !== "object" || message.attachment === null) {
+            return false;
+        }
+
+        const attachment = message.attachment as Record<string, unknown>;
+
         return (
-            typeof message.id === "string" &&
-            typeof message.text === "string" &&
-            (message.sender === "a" || message.sender === "b") &&
-            typeof message.createdAt === "string"
+            typeof attachment.name === "string" &&
+            typeof attachment.url === "string" &&
+            typeof attachment.contentType === "string" &&
+            typeof attachment.size === "number"
         );
     }
 
@@ -178,7 +197,7 @@ export class WebSocketClient {
     private clearReconnectTimer() {
         if (this.reconnectTimer !== null) {
             clearTimeout(this.reconnectTimer);
-            
+
             this.reconnectTimer = null;
         }
     }

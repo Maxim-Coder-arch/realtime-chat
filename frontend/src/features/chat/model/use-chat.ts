@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
     WebSocketClient,
 } from "../../../shared/api/websocket/websocket-client";
+import { uploadFile } from "../../../shared/api/files/upload-file";
 
 import type { 
     ChatMessage, 
@@ -44,6 +45,41 @@ export const useChat = (side: ChatSide) => {
         };
     }, []);
 
+    const sendFile = useCallback(async (file: File): Promise<boolean> => {
+        if (status !== "connected") {
+            return false;
+        }
+
+        try {
+            const attachment = await uploadFile(file);
+
+            const message: ChatMessage = {
+                id: crypto.randomUUID(),
+                text: "",
+                sender: side,
+                createdAt: new Date().toISOString(),
+                attachment,
+            };
+
+            const isSent = clientRef.current?.send(message) ?? false;
+
+            if (!isSent) {
+                return false;
+            }
+
+            setMessages((previousMessages) => [
+                ...previousMessages,
+                message,
+            ]);
+
+            return true;
+        } catch (error) {
+            console.error("Failed to send file:", error);
+
+            return false;
+        }
+    }, [side, status]);
+
     const sendMessage = useCallback((text: string): boolean => {
         const normalizedText = text.trim();
 
@@ -76,5 +112,6 @@ export const useChat = (side: ChatSide) => {
         messages,
         status,
         sendMessage,
+        sendFile,
     };
 };
