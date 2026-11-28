@@ -3,6 +3,7 @@ import { useState, type CSSProperties, type FormEvent } from "react";
 import { useTheme } from "../../../../../shared/config/themes/themes";
 
 import { useChat } from "../../../../../features/chat/model/use-chat";
+import type { Sticker } from "../../../../../entities/sticker";
 
 export const useChatPanel = (side: "a" | "b") => {
     const theme = useTheme();
@@ -12,6 +13,7 @@ export const useChatPanel = (side: "a" | "b") => {
         status,
         sendMessage,
         sendFile,
+        sendSticker,
     } = useChat(side);
 
     const [messageText, setMessageText] = useState("");
@@ -55,6 +57,14 @@ export const useChatPanel = (side: "a" | "b") => {
         }
     };
 
+    const handleStickerSelect = (sticker: Sticker) => {
+        if (status !== "connected") {
+            return;
+        }
+
+        sendSticker(sticker);
+    };
+
     return {
         messages,
         status,
@@ -66,5 +76,6 @@ export const useChatPanel = (side: "a" | "b") => {
         uploadError,
         handleFileSelect,
         handleSubmit,
+        handleStickerSelect,
     };
 };

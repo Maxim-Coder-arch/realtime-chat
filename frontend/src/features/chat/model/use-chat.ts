@@ -10,6 +10,7 @@ import type {
     ChatSide, 
     WebSocketStatus
  } from "../../../shared/api/websocket/chat-message.type";
+import type { Sticker } from "../../../entities/sticker";
 
 const WS_URL = import.meta.env.VITE_WS_URL;
 
@@ -108,10 +109,40 @@ export const useChat = (side: ChatSide) => {
         return true;
     }, [side]);
 
+    const sendSticker = useCallback((sticker: Sticker): boolean => {
+        const message: ChatMessage = {
+            id: crypto.randomUUID(),
+            text: "",
+            sender: side,
+            createdAt: new Date().toISOString(),
+            sticker: {
+                id: sticker.id,
+                name: sticker.name,
+                imageUrl: sticker.poster.url,
+                pageUrl: sticker.page,
+                credit: sticker.credit,
+            },
+        };
+
+        const isSent = clientRef.current?.send(message) ?? false;
+
+        if (!isSent) {
+            return false;
+        }
+
+        setMessages((previousMessages) => [
+            ...previousMessages,
+            message,
+        ]);
+
+        return true;
+    }, [side]);
+
     return {
         messages,
         status,
         sendMessage,
         sendFile,
+        sendSticker,
     };
 };

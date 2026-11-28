@@ -1,7 +1,7 @@
 import { motion, MotionConfig } from "framer-motion";
 
-import { panelVariants } from "../../../models/animations";
-import type { ChatPanelLayoutProps } from "../../../models/types";
+import { panelVariants } from "../../../model/animations";
+import type { ChatPanelLayoutProps } from "../../../model/types";
 
 import styles from "../../styles/chat-panel.module.scss";
 

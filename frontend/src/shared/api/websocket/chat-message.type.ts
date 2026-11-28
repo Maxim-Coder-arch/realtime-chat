@@ -6,6 +6,7 @@ export interface ChatMessage {
     sender: ChatSide;
     createdAt: string;
     attachment?: ChatAttachment;
+    sticker?: ChatSticker;
 }
 
 export type WebSocketStatus =
@@ -28,4 +29,12 @@ export interface ChatAttachment {
     url: string;
     contentType: string;
     size: number;
+}
+
+export interface ChatSticker {
+    id: string;
+    name: string;
+    imageUrl: string;
+    pageUrl: string;
+    credit: string;
 }

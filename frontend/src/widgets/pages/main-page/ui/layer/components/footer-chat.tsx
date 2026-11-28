@@ -1,13 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { motion } from "framer-motion";
 
 import { Paperclip, Send, Smile, LoaderCircle } from "lucide-react";
 
-import { footerVariants, sendIconVariants } from "../../../models/animations";
-import type { FooterChatProps } from "../../../models/types";
+import { footerVariants, sendIconVariants } from "../../../model/animations";
+import type { FooterChatProps } from "../../../model/types";
 
 import styles from "../../styles/chat-panel.module.scss";
+import { StickerPicker } from "../../../../../sticker-picker";
 
 export const FooterChat = ({
     messageText,
@@ -17,7 +18,9 @@ export const FooterChat = ({
     onMessageTextChange,
     onFileSelect,
     onSubmit,
+    onStickerSelect,
 }: FooterChatProps) => {
+    const [isStickerPickerOpen, setIsStickerPickerOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +71,9 @@ export const FooterChat = ({
                 <motion.button
                     type="button"
                     className={styles["emoji-button"]}
-                    aria-label="Эмодзи"
+                    aria-label="Открыть стикеры"
+                    aria-expanded={isStickerPickerOpen}
+                    onClick={() => setIsStickerPickerOpen((previous) => !previous)}
                     whileHover={{ scale: 1.2, rotate: 12 }}
                     whileTap={{ scale: 0.85 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
@@ -101,6 +106,16 @@ export const FooterChat = ({
                 <span className={styles["upload-error"]}>
                     {uploadError}
                 </span>
+            )}
+
+            {isStickerPickerOpen && (
+                <StickerPicker
+                    onClose={() => setIsStickerPickerOpen(false)}
+                    onSelect={(sticker) => {
+                        onStickerSelect(sticker);
+                        setIsStickerPickerOpen(false);
+                    }}
+                />
             )}
         </motion.form>
     );

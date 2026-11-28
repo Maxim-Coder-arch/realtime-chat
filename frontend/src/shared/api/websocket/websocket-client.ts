@@ -143,7 +143,7 @@ export class WebSocketClient {
         }
     }
 
-    private isChatMessage(value: unknown): value is ChatMessage {
+    private isChatMessage(value: unknown) {
         if (typeof value !== "object" || value === null) {
             return false;
         }
@@ -159,23 +159,49 @@ export class WebSocketClient {
             return false;
         }
 
-        if (message.attachment === undefined) {
-            return true;
+        if (message.attachment !== undefined) {
+            if (
+                typeof message.attachment !== "object" ||
+                message.attachment === null
+            ) {
+                return false;
+            }
+
+            const attachment = message.attachment as Record<string, unknown>;
+
+            if (
+                typeof attachment.name !== "string" ||
+                typeof attachment.url !== "string" ||
+                typeof attachment.contentType !== "string" ||
+                typeof attachment.size !== "number"
+            ) {
+                return false;
+            }
         }
 
-        if (typeof message.attachment !== "object" || message.attachment === null) {
-            return false;
+        if (message.sticker !== undefined) {
+            if (
+                typeof message.sticker !== "object" ||
+                message.sticker === null
+            ) {
+                return false;
+            }
+
+            const sticker = message.sticker as Record<string, unknown>;
+
+            if (
+                typeof sticker.id !== "string" ||
+                typeof sticker.name !== "string" ||
+                typeof sticker.imageUrl !== "string" ||
+                typeof sticker.pageUrl !== "string" ||
+                typeof sticker.credit !== "string"
+            ) {
+                return false;
+            }
         }
 
-        const attachment = message.attachment as Record<string, unknown>;
-
-        return (
-            typeof attachment.name === "string" &&
-            typeof attachment.url === "string" &&
-            typeof attachment.contentType === "string" &&
-            typeof attachment.size === "number"
-        );
-    }
+        return true;
+    };
 
     private setStatus(status: WebSocketStatus) {
         this.statusListeners.forEach((listener) => {

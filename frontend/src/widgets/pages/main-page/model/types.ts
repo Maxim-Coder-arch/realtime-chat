@@ -3,6 +3,7 @@ import type { CSSProperties, FormEvent, ReactNode } from "react";
 import type { statusLabels } from "./config";
 
 import type { ChatMessage } from "../../../../shared/api/websocket/chat-message.type";
+import type { Sticker } from "../../../../entities/sticker";
 
 export interface ChatMessageProps {
     messages: ChatMessage[];
@@ -24,6 +25,7 @@ export interface FooterChatProps {
     onMessageTextChange: (value: string) => void;
     onFileSelect: (file: File) => void;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    onStickerSelect: (sticker: Sticker) => void;
 }
 
 export type ChatStatus = keyof typeof statusLabels;

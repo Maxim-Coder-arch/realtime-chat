@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, File, Download } from "lucide-react";
 
-import { bodyVariants, EASE_OUT } from "../../../models/animations";
-import type { ChatMessageProps } from "../../../models/types";
+import { bodyVariants, EASE_OUT } from "../../../model/animations";
+import type { ChatMessageProps } from "../../../model/types";
 
 import { formatMessageTime } from "../../../lib/helpers/format-message-time";
 import { formatFileSize } from "../../../lib/helpers/format-file-size";
@@ -136,6 +136,22 @@ export const ChatMessage = ({ messages, side }: ChatMessageProps) => {
                                     <AttachmentPreview
                                         {...message.attachment}
                                     />
+                                )}
+
+                                {message.sticker && (
+                                    <a
+                                        href={message.sticker.pageUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={styles["message-sticker"]}
+                                        title={message.sticker.name}
+                                    >
+                                        <img
+                                            src={message.sticker.imageUrl}
+                                            alt={message.sticker.name}
+                                            loading="lazy"
+                                        />
+                                    </a>
                                 )}
 
                                 {message.text && <p>{message.text}</p>}

@@ -705,3 +705,18 @@ $glow-accent: rgba(139, 120, 197, 0.45);
     height: 17px;
     color: $color-text-secondary;
 }
+
+.message-sticker {
+    display: block;
+    width: 180px;
+    max-width: 100%;
+
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+}

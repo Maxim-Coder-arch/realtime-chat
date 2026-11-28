@@ -1,11 +1,11 @@
 import { FooterChat } from "./components/footer-chat";
-import { ChatMessage } from "./components/chat-messaged";
+import { ChatMessage } from "./components/chat-message";
 import { HeaderChat } from "./components/header-chat";
 import { ChatPanelLayout } from "./components/chat-panel-layout";
 
 import { useChatPanel } from "../../lib/hooks/use-chat-panel";
 
-import type { ChatPanelProps } from "../../models/types";
+import type { ChatPanelProps } from "../../model/types";
 
 export const ChatPanel = ({ title, side }: ChatPanelProps) => {
     const {
@@ -19,6 +19,7 @@ export const ChatPanel = ({ title, side }: ChatPanelProps) => {
         isUploading,
         uploadError,
         handleFileSelect,
+        handleStickerSelect,
     } = useChatPanel(side);
 
     return (
@@ -32,6 +33,7 @@ export const ChatPanel = ({ title, side }: ChatPanelProps) => {
                 uploadError={uploadError}
                 onMessageTextChange={setMessageText}
                 onFileSelect={handleFileSelect}
+                onStickerSelect={handleStickerSelect}
                 onSubmit={handleSubmit}
             />
         </ChatPanelLayout>

@@ -2,9 +2,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { MoreHorizontal, Search } from "lucide-react";
 
-import { EASE_OUT, headerVariants } from "../../../models/animations";
-import { statusLabels } from "../../../models/config";
-import type { HeaderChatProps } from "../../../models/types";
+import { EASE_OUT, headerVariants } from "../../../model/animations";
+import { statusLabels } from "../../../model/config";
+import type { HeaderChatProps } from "../../../model/types";
 
 import styles from "../../styles/chat-panel.module.scss";
 
