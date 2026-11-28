@@ -7,9 +7,16 @@ import { useChat } from "../../../../../features/chat/model/use-chat";
 export const useChatPanel = (side: "a" | "b") => {
     const theme = useTheme();
 
-    const { messages, status, sendMessage } = useChat(side);
+    const {
+        messages,
+        status,
+        sendMessage,
+        sendFile,
+    } = useChat(side);
 
     const [messageText, setMessageText] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     const canSend = Boolean(messageText.trim()) && status === "connected";
 
@@ -31,6 +38,23 @@ export const useChatPanel = (side: "a" | "b") => {
         }
     };
 
+    const handleFileSelect = async (file: File) => {
+        setUploadError(null);
+        setIsUploading(true);
+
+        try {
+            const isSent = await sendFile(file);
+
+            if (!isSent) {
+                setUploadError("Не удалось отправить файл");
+            }
+        } catch {
+            setUploadError("Произошла ошибка при загрузке файла");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     return {
         messages,
         status,
@@ -38,6 +62,9 @@ export const useChatPanel = (side: "a" | "b") => {
         setMessageText,
         canSend,
         panelStyle,
+        isUploading,
+        uploadError,
+        handleFileSelect,
         handleSubmit,
     };
 };

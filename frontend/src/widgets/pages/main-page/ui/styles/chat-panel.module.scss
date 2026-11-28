@@ -591,3 +591,117 @@ $glow-accent: rgba(139, 120, 197, 0.45);
         transition: none;
     }
 }
+
+.file-input {
+    display: none;
+}
+
+.upload-spinner {
+    animation: upload-spin 1s linear infinite;
+}
+
+@keyframes upload-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.upload-error {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 20px;
+
+    padding: 7px 12px;
+
+    border: 1px solid rgba(239, 107, 115, 0.3);
+    border-radius: $radius-md;
+    background: rgba(35, 20, 25, 0.95);
+
+    @include chat-font($font-size-xs, $font-weight-medium, #ef6b73);
+}
+
+.attachment-image-link {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: $radius-md;
+}
+
+.attachment-image {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    max-height: 280px;
+
+    object-fit: contain;
+    border-radius: inherit;
+}
+
+.attachment-file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 210px;
+    max-width: 300px;
+    padding: 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: $radius-md;
+
+    background: rgba(0, 0, 0, 0.12);
+    color: $color-text-primary;
+    text-decoration: none;
+
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.22);
+    }
+}
+
+.attachment-file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+
+    border-radius: $radius-md;
+    background: rgba(255, 255, 255, 0.1);
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.attachment-file-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.attachment-file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include chat-font($font-size-sm, $font-weight-medium, $color-text-primary);
+}
+
+.attachment-file-size {
+    @include chat-font($font-size-xs, $font-weight-regular, $color-text-secondary);
+}
+
+.attachment-download {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    color: $color-text-secondary;
+}

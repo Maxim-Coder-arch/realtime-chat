@@ -18,7 +18,11 @@ export interface ChatPanelLayoutProps {
 export interface FooterChatProps {
     messageText: string;
     canSend: boolean;
+    isUploading: boolean;
+    uploadError: string | null;
+
     onMessageTextChange: (value: string) => void;
+    onFileSelect: (file: File) => void;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 

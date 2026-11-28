@@ -1,6 +1,8 @@
+import { useRef } from "react";
+
 import { motion } from "framer-motion";
 
-import { Paperclip, Send, Smile } from "lucide-react";
+import { Paperclip, Send, Smile, LoaderCircle } from "lucide-react";
 
 import { footerVariants, sendIconVariants } from "../../../models/animations";
 import type { FooterChatProps } from "../../../models/types";
@@ -10,24 +12,48 @@ import styles from "../../styles/chat-panel.module.scss";
 export const FooterChat = ({
     messageText,
     canSend,
+    isUploading,
+    uploadError,
     onMessageTextChange,
+    onFileSelect,
     onSubmit,
 }: FooterChatProps) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+            onFileSelect(file);
+        }
+
+        event.target.value = "";
+    };
+
     return (
         <motion.form
             className={styles["chat-footer"]}
             onSubmit={onSubmit}
             variants={footerVariants}
         >
+            <input
+                ref={fileInputRef}
+                type="file"
+                className={styles["file-input"]}
+                onChange={handleFileChange}
+            />
+
             <motion.button
                 type="button"
                 className={styles["attachment-button"]}
                 aria-label="Прикрепить файл"
+                disabled={isUploading}
+                onClick={() => fileInputRef.current?.click()}
                 whileHover={{ scale: 1.08, rotate: -12 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
             >
-                <Paperclip />
+                {isUploading ? <LoaderCircle className={styles["upload-spinner"]} /> : <Paperclip />}
             </motion.button>
 
             <div className={styles["message-input-wrapper"]}>
@@ -70,6 +96,12 @@ export const FooterChat = ({
                     <Send />
                 </motion.span>
             </motion.button>
+
+            {uploadError && (
+                <span className={styles["upload-error"]}>
+                    {uploadError}
+                </span>
+            )}
         </motion.form>
-    )
-}
+    );
+};

@@ -16,6 +16,9 @@ export const ChatPanel = ({ title, side }: ChatPanelProps) => {
         canSend,
         panelStyle,
         handleSubmit,
+        isUploading,
+        uploadError,
+        handleFileSelect,
     } = useChatPanel(side);
 
     return (
@@ -25,7 +28,10 @@ export const ChatPanel = ({ title, side }: ChatPanelProps) => {
             <FooterChat
                 messageText={messageText}
                 canSend={canSend}
+                isUploading={isUploading}
+                uploadError={uploadError}
                 onMessageTextChange={setMessageText}
+                onFileSelect={handleFileSelect}
                 onSubmit={handleSubmit}
             />
         </ChatPanelLayout>
